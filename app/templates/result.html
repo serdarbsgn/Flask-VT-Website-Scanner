@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<h1>URL REPORT: {{ main_url}}</h1>
+<table>
+    <thead>
+      <tr>
+        <th>URL</th>
+        <th>Malicious Detections</th>
+        <th>Suspicious Detections</th>
+        <th>Undetected Detections</th>
+        <th>Harmless Detections</th>
+        <th>Timeouts</th>
+        <th>Last Scanned</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for result in scan_result %}
+        <tr>
+            <td><a href="{{ url_for('detail', scan_id=result.id) }}">{{ result.url|safe }}</a></td>
+            <td>{{ result.malicious }}</td>
+            <td>{{ result.suspicious }}</td>
+            <td>{{ result.undetected }}</td>
+            <td>{{ result.harmless }}</td>
+            <td>{{ result.timeout }}</td>
+            <td>{{ result.last_scanned }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    {% include 'footer.html' %}
+</body>
+  
+</html>

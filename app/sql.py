@@ -47,11 +47,25 @@ class Select:
     def main_urls():
         return select(MainURLs.id,MainURLs.url_hash,MainURLs.url,MainURLs.last_scanned)
     
-    def main_url_id_from_hash(url_hash):
-        return select(MainURLs.id).where(MainURLs.url_hash == url_hash)
+    def main_urls_url_from_id(id):
+        return select(MainURLs.url).where(MainURLs.id == id)
     
-    def scanned_url_id_from_hash(url_hash):
+    def main_urls_id_from_hash(url_hash):
+        return select(MainURLs.id).where(MainURLs.url_hash == url_hash)
+
+    def scanned_urls_from_main_id(main_id):
+        return select(ScannedURLs.id,ScannedURLs.url,ScannedURLs.url_hash,ScannedURLs.malicious,ScannedURLs.suspicious,ScannedURLs.undetected,ScannedURLs.harmless,ScannedURLs.timeout,ScannedURLs.last_scanned
+                           ).where(MSURLs.scanned_url_id == ScannedURLs.id,MainURLs.id == MSURLs.main_url_id
+                                              ).join(MSURLs,ScannedURLs.id == MSURLs.scanned_url_id).join(MainURLs,MSURLs.main_url_id == MainURLs.id).where(MainURLs.id == main_id)
+    def scanned_urls_url_from_id(scan_id):
+        return select(ScannedURLs.url).where(ScannedURLs.id == scan_id)
+        
+    def scanned_urls_id_from_hash(url_hash):
         return select(ScannedURLs.id).where(ScannedURLs.url_hash == url_hash)
+    
+    def report_results_from_scanned_id(scanned_id):
+        return select(ReportResults.engine_name,ReportResults.method,ReportResults.category,ReportResults.result).where(ReportResults.scanned_url_id == scanned_id)
+
     
 class Insert:
     def main_urls(data):

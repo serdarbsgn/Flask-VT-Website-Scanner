@@ -35,7 +35,7 @@ def main():
                                                     **get_report["data"]["attributes"]["last_analysis_stats"],
                                                     "date":datetime.fromtimestamp(get_report["data"]["attributes"]["last_analysis_date"])}))
                 sql.commit()
-                url_id = sql.session.execute(Select.scanned_url_id_from_hash(url_hash)).fetchone()[0]
+                url_id = sql.session.execute(Select.scanned_urls_id_from_hash(url_hash)).fetchone()[0]
                 sql.execute(Insert.ms_urls({"main_url_id":main_url_id,"scanned_url_id":url_id}))
                 for value in get_report["data"]["attributes"]["last_analysis_results"].values():
                     sql.execute(Insert.report_results({"scanned_url_id":url_id,"engine_name":value["engine_name"],"method":value["method"],"category":value["category"],"result":value["result"]}))
@@ -71,7 +71,7 @@ def main():
                 with sqlconn(sql_engine) as sql:
                     sql.execute(Insert.main_urls({"url":main_url,"url_hash":main_url_hash}))
                     sql.commit()
-                    main_url_id = sql.session.execute(Select.main_url_id_from_hash(main_url_hash)).fetchone()[0]
+                    main_url_id = sql.session.execute(Select.main_urls_id_from_hash(main_url_hash)).fetchone()[0]
             else:
                 data = {
                     "links": list(url_list)

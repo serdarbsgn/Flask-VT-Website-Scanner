@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<h1>Results List</h1>
+<table>
+    <thead>
+      <tr>
+        <th>URL</th>
+        <th>Last Scanned</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for result in results_list %}
+        <tr>
+            <td><a href="{{ url_for('result', scan_id=result.id) }}">{{ result.url|safe }}</a></td>
+            <td>{{result.last_scanned}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    {% include 'footer.html' %}
+</body>
+  
+</html>

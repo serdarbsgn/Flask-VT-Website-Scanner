@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<h1>Scan Details: {{scanned_url}}</h1>
+<table>
+    <thead>
+      <tr>
+        <th>Engine</th>
+        <th>Method</th>
+        <th>Category</th>
+        <th>Result</th>
+        <th>Engine</th>
+        <th>Method</th>
+        <th>Category</th>
+        <th>Result</th>
+      </tr>
+      </tr>
+    </thead>
+    <tbody>
+      {% for detail in detail_results %}
+          {% if loop.index % 2 == 1 %}
+            <tr>
+          {% endif %}
+              <td>{{ detail.engine_name }}</td>
+              <td>{{ detail.method }}</td>
+              <td>{{ detail.category }}</td>
+              <td>{{ detail.result }}</td>
+          {% if loop.index % 2 == 0 %}
+            </tr>
+          {% endif %}
+          {% if loop.last %}
+            </tr>
+          {% endif %}
+      {% endfor %}
+    </tbody>
+    </table>
+    {% include 'footer.html' %}
+</body>
+  
+</html>
