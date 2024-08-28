@@ -19,9 +19,11 @@ def home():
 def scan():
     url = request.args.get("url",type=str)
     if not url or url.find(".") == -1 or url.startswith("."):
-        return "Supply a valid URL",400
+        flash("Supply a valid URL")
+        return redirect(url_for('home'))
     response = get_links(url)
-    return response
+    flash(response[0])
+    return redirect(url_for('home'))
 
 @app.route('/results',methods=['GET'])
 def results():

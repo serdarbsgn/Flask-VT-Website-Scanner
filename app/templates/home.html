@@ -12,7 +12,11 @@
 <body>
     {% include 'header.html' %}
     <h1>Welcome</h1>
-    <h4><a href="{{url_for('scan')}}">Scan an URL</a></h4>
+    <form action="{{ url_for('scan') }}" method="get">
+        <h4>Scan an URL:</h4>
+        <input type="text" name="url" placeholder="Enter URL" required>
+        <button type="submit">Submit</button>
+    </form>
     <h4><a href="{{url_for('results')}}">Show existing results</a></h4>
     {% include 'footer.html' %}
   </body>

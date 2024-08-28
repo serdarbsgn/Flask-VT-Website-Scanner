@@ -62,6 +62,7 @@ def main():
                 print("Queue empty")
                 time.sleep(120)
                 continue
+            main_url = main_url.decode()
             print(f"Processing {main_url}")
             url_list = json.loads(url_list)["links"]
             response = scan_url_request(main_url)
@@ -82,7 +83,7 @@ def main():
                     pip.lpush('list_queue', serialized_data)
                     pip.execute()
                 print("Time to rest before trying again.")
-                time.sleep(60)
+                time.sleep(180)
                 continue
             responses = {main_url:response}
         else:

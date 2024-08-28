@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+  {% include 'header.html' %}
 <h1>Results List</h1>
 <table>
     <thead>
@@ -19,7 +20,7 @@
     <tbody>
         {% for result in results_list %}
         <tr>
-            <td><a href="{{ url_for('result', scan_id=result.id) }}">{{ result.url|safe }}</a></td>
+            <td><a href="{{ url_for('result', main_id=result.id) }}">{{ result.url|safe }}</a></td>
             <td>{{result.last_scanned}}</td>
         </tr>
         {% endfor %}

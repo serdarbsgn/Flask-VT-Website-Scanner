@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 load_dotenv()
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 REDIS_PASSWORD = os.getenv("REDIS_PASS")
 VT_API_KEY = os.getenv("VT_API_KEY")
 MYSQL_USER = os.getenv("MYSQL_USER")
