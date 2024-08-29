@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from multiprocessing import Process
 from bs4 import BeautifulSoup as bs
@@ -17,7 +18,7 @@ def get_links(main_url):
     if r.sismember("main_urls",main_url):
         return "Already queued URL",202
     if r.exists(f"worked_main_urls_exp:{main_url}"):
-        return f"Please request the scan after a while : {r.get(f'worked_main_urls_exp:{main_url}')}",400
+        return f"Please request the scan after a while : {str(r.get(f'worked_main_urls_exp:{main_url}'))}, it's currently : {str(datetime.now())}",400
     if response.content is not None:
         thread = Process(target = scrape_html_for_urls,args =(response,))
         thread.start()

@@ -1,4 +1,4 @@
-from flask import flash, jsonify, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from app import app,sql_engine
 from app.scrape_urls import get_links
 from app.sql import sqlconn,Select
@@ -27,8 +27,12 @@ def scan():
 
 @app.route('/results',methods=['GET'])
 def results():
-    with sqlconn(sql_engine) as sql:
-        main_urls = listify(sql.session.execute(Select.main_urls()).mappings().fetchall())
+    try:
+        with sqlconn(sql_engine) as sql:
+            main_urls = listify(sql.session.execute(Select.main_urls()).mappings().fetchall())
+    except:
+        flash("Couldn't create connection, maybe mysql container not yet initialized?")
+        return redirect(url_for('home'))
     return render_template("results.html",results_list = main_urls)
 
 @app.route('/result/<int:main_id>',methods=['GET'])

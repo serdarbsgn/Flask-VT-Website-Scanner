@@ -1,3 +1,4 @@
+import logging
 from sqlalchemy.orm import Session
 from sqlalchemy import  delete, func, select
 from sqlalchemy.dialects.mysql import insert
@@ -5,14 +6,17 @@ from app.sql_tables import MainURLs,ScannedURLs,MSURLs,ReportResults
 class sqlconn:
 
     def __init__(self,def_engine):
-        engine = def_engine
-        connection = engine.connect()
-        connection = connection.execution_options(
-        stream_results=True,
-        isolation_level="READ UNCOMMITTED"
-)
-        self.session = Session(engine)
-        self.connection = connection
+        try:
+            engine = def_engine
+            connection = engine.connect()
+            connection = connection.execution_options(
+            stream_results=True,
+            isolation_level="READ UNCOMMITTED"
+    )
+            self.session = Session(engine)
+            self.connection = connection
+        except:
+            logging.warn("Couldn't create connection, maybe mysql container not yet initialized?")
 
     def __enter__(self):
         return self

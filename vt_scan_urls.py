@@ -1,10 +1,12 @@
 import json
 import time
+import os
 import redis
 from app.request_helper import session_get, session_post
 import sqlalchemy
 from app.sql import sqlconn,Select,Insert
 from datetime import datetime, timedelta
+import logging
 def main():
     import app.settings as s
     def scan_url_request(url):
@@ -15,7 +17,7 @@ def main():
         
         response = session_post(VT_API_LINK,headers=headers,data=payload)
         if not response or response.status_code != 200:
-            print(f"This went wrong in some way: {url}")
+            logging.warn(f"Scan request went wrong in some way: {url}")
             return None
         return response
     def scan_result_request(hash):
@@ -23,7 +25,7 @@ def main():
             "x-apikey": s.VT_API_KEY}
         response = session_get(VT_API_LINK+f"/{hash}",headers=headers)
         if not response or response.status_code != 200:
-            print(f"This went wrong in some way: {hash}")
+            logging.warn(f"Result read request went wrong in some way: {hash}")
             return None
         return response
     def request_and_insert_results(url,url_hash):
@@ -42,10 +44,10 @@ def main():
                 sql.commit()
         else: return (url,url_hash)
     sql_engine = sqlalchemy.create_engine(
-                "mysql://"+s.MYSQL_USER+":"+s.MYSQL_PW+"@localhost/"+s.MYSQL_DB,
+                "mysql://"+s.MYSQL_USER+":"+s.MYSQL_PW+"@db/"+s.MYSQL_DB,
                 isolation_level="READ UNCOMMITTED")
     VT_API_LINK = "https://www.virustotal.com/api/v3/urls"
-    r = redis.StrictRedis(host='localhost', port=6379, db=0,password=s.REDIS_PASSWORD)
+    r = redis.StrictRedis(host=os.getenv('REDIS_HOST',"localhost"), port=6379, db=0,password=s.REDIS_PASSWORD)
     failed_request_flag = False
     failed_result_flag = False
     previous_main_url = None
@@ -59,11 +61,11 @@ def main():
                 results = pip.execute()
             main_url, url_list = results
             if not main_url:
-                print("Queue empty")
+                logging.info("Queue empty, I'll sleep for 2 minutes.")
                 time.sleep(120)
                 continue
             main_url = main_url.decode()
-            print(f"Processing {main_url}")
+            logging.info(f"Processing {main_url}")
             url_list = json.loads(url_list)["links"]
             response = scan_url_request(main_url)
             main_url_id = None
@@ -82,7 +84,7 @@ def main():
                     pip.lpush('main_url_queue', main_url)
                     pip.lpush('list_queue', serialized_data)
                     pip.execute()
-                print("Time to rest before trying again.")
+                logging.info("Time to rest (3 minutes) before trying again.")
                 time.sleep(180)
                 continue
             responses = {main_url:response}
@@ -121,16 +123,17 @@ def main():
         if failed_scan_request_responses:
             failed_request_flag = failed_scan_request_responses
             previous_main_url = main_url
-            print("There are some requests that are failed. Will try once more to request it.")
+            logging.info("There are some requests that are failed. Will try once more to request it.")
         elif failed_scan_result_responses:
             failed_result_flag = failed_scan_result_responses
             previous_main_url = main_url
-            print("There are some results that couldn't be fetched. Will try once more to retrieve it.")
+            logging.info("There are some results that couldn't be fetched. Will try once more to retrieve it.")
         else:
             failed_request_flag = False
             failed_result_flag = False
             previous_main_url = None
-            r.setex(f"worked_main_urls_exp:{main_url.decode()}", 3600, str(datetime.now()+timedelta(hours=1)))
+            r.setex(f"worked_main_urls_exp:{main_url}", 3600, str(datetime.now()+timedelta(hours=1)))
+            logging.info(f"Finished working on {main_url}, set it a 1 hour cooldown on this URL not to waste api credits.")
             #Reset flags to default.Add 1 hour cooldown to this url.
         r.srem("main_urls",main_url)
 
