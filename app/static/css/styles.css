@@ -81,3 +81,29 @@ th {
   color: #ffffff; 
   background-color: #00b377;
 }
+
+#clean{
+  color: #000000; 
+  background-color: #31e44f;
+}
+
+#unrated{
+  color: #000000; 
+  background-color: #d6d6d6;
+}
+
+#suspicious{
+  color: #000000; 
+  background-color: #ece91f;
+}
+
+#malicious{
+  color: #000000; 
+  background-color: #ff4b4b;
+}
+
+#phishing{
+  color: #000000; 
+  background-color: #ffa200;
+}
+

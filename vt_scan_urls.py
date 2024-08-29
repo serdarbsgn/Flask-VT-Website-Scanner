@@ -61,7 +61,7 @@ def main():
                 results = pip.execute()
             main_url, url_list = results
             if not main_url:
-                logging.info("Queue empty, I'll sleep for 2 minutes.")
+                logging.info("Scan queue empty, I'll sleep for 2 minutes.")
                 time.sleep(120)
                 continue
             main_url = main_url.decode()

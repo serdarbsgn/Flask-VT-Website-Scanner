@@ -32,7 +32,7 @@
               <td>{{ detail.engine_name }}</td>
               <td>{{ detail.method }}</td>
               <td>{{ detail.category }}</td>
-              <td>{{ detail.result }}</td>
+              <td id = {{ detail.result }} >{{ detail.result }}</td>
           {% if loop.index % 2 == 0 %}
             </tr>
           {% endif %}
