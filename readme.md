@@ -10,7 +10,9 @@ In project dir, use this to build.
 127.0.0.1:5000
 ```     
     
-Visit this on browser for ui.
-After queueing an URL to scan, it'll take some time to display the results at /results tab.    
-Redis queues the URLs, so you can't re-add them for scanning while they're queued or     
-the scan is finished just now. 1 hour cooldown, per URL (To save on API calls)    
+Visit this on browser for ui.       
+     
+After queueing an URL to scan, it'll take some time to display the results at /results tab.        
+Redis queues the URLs, so you can't re-add them for scanning while they're queued or        
+the scan is finished just now. 1 hour cooldown, per URL (To save on API calls)       
+ 
