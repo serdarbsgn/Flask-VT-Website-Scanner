@@ -16,7 +16,7 @@ class sqlconn:
             self.session = Session(engine)
             self.connection = connection
         except:
-            logging.warn("Couldn't create connection, maybe mysql container not yet initialized?")
+            logging.warning(msg ="Couldn't create connection, maybe mysql container not yet initialized?")
 
     def __enter__(self):
         return self

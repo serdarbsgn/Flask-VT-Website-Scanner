@@ -17,7 +17,7 @@ def main():
         
         response = session_post(VT_API_LINK,headers=headers,data=payload)
         if not response or response.status_code != 200:
-            logging.warn(f"Scan request went wrong in some way: {url}")
+            logging.warning(msg = f"Scan request went wrong in some way: {url}")
             return None
         return response
     def scan_result_request(hash):
@@ -25,7 +25,7 @@ def main():
             "x-apikey": s.VT_API_KEY}
         response = session_get(VT_API_LINK+f"/{hash}",headers=headers)
         if not response or response.status_code != 200:
-            logging.warn(f"Result read request went wrong in some way: {hash}")
+            logging.warning(msg =f"Result read request went wrong in some way: {hash}")
             return None
         return response
     def request_and_insert_results(url,url_hash):
