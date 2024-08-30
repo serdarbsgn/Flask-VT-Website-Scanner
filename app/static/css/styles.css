@@ -82,12 +82,12 @@ th {
   background-color: #00b377;
 }
 
-#clean{
+#harmless{
   color: #000000; 
   background-color: #31e44f;
 }
 
-#unrated{
+#undetected{
   color: #000000; 
   background-color: #d6d6d6;
 }
@@ -102,8 +102,9 @@ th {
   background-color: #ff4b4b;
 }
 
-#phishing{
+#timeout{
   color: #000000; 
-  background-color: #ffa200;
+  background-color: #838383;
 }
+
 
