@@ -1,5 +1,7 @@
 ## Installation    
     
+Enter your VirusTotal API key to .env file, VT_API_KEY = "ENTER YOUR API KEY HERE"    
+
 ```sh
 docker-compose up --build
 ```    
